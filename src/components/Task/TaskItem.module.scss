@@ -1,0 +1,27 @@
+.task {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    .taskName {
+        width: 100%;
+        font-size: 16px;
+    }
+    .delBtn {
+        display: flex;
+        justify-content: flex-end;
+        button {
+            width: 26px;
+            height: 26px;
+            background-color: #fff;
+            border-radius: 5px;
+            transition: background-color 0.2s ease-in;
+            &:hover {
+                background-color: #f8f8f8;
+            }
+        }
+    }
+}
+
+.isDone {
+    opacity: 0.5;
+}

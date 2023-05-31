@@ -1,0 +1,23 @@
+.taskFilter {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 10px;
+    button {
+            padding: 0 5px;     
+            height: 26px;
+            background-color: #fff;            
+            border-radius: 5px;
+            transition: background-color .1s ease-in;
+            &:hover {
+                background-color: #f8f8f8;
+            }
+    }
+    .active {
+        background-color: aquamarine;
+        &:hover {
+            background-color: aquamarine;
+        }
+    }
+}
