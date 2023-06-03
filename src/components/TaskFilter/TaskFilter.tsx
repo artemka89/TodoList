@@ -2,7 +2,7 @@ import { FilterValuesType } from "../../App";
 import styles from "./TaskFilter.module.scss";
 
 type TaskFilterType = {
-    id: string
+    id: string;
     changeFilter: (value: FilterValuesType, id: string) => void;
     filter: FilterValuesType;
 };
@@ -10,7 +10,7 @@ type TaskFilterType = {
 export const TaskFilter: React.FC<TaskFilterType> = ({
     changeFilter,
     filter,
-    id
+    id,
 }) => {
     return (
         <div className={styles.taskFilter}>

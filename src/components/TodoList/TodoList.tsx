@@ -1,8 +1,9 @@
-import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { TaskItem } from "../Task/TaskItem";
-import styles from "./ToDoList.module.scss";
+import styles from "./TodoList.module.scss";
 import { FilterValuesType, TaskItemType } from "../../App";
 import { TaskFilter } from "../TaskFilter/TaskFilter";
+import { AddItemForm } from "../AddItemForm/AddItemForm";
+import { EditableSpan } from "../EditableSpan/EditableSpan";
 
 type ToDoListItemProps = {
     id: string;
@@ -12,6 +13,12 @@ type ToDoListItemProps = {
     removeTaskItem: (taskId: string, todoListId: string) => void;
     changeFilter: (value: FilterValuesType, id: string) => void;
     changeStatus: (taskId: string, isDone: boolean, todoListId: string) => void;
+    changeTaskTitle: (
+        taskId: string,
+        newTitle: string,
+        todoListId: string
+    ) => void;
+    onChangeTodoListTitle: (todoListId: string, newTitle: string) => void;
     removeTodoList: (todoListId: string) => void;
     filter: FilterValuesType;
 };
@@ -25,58 +32,34 @@ export const ToDoList: React.FC<ToDoListItemProps> = ({
     changeFilter,
     changeStatus,
     removeTodoList,
+    changeTaskTitle,
+    onChangeTodoListTitle,
     filter,
 }) => {
-    const [inputValue, setInputValue] = useState("");
-    const [error, setError] = useState("");
-
-    const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setInputValue(event.target.value);
-        setError("");
-    };
-
-    const onClickEnter = (event: KeyboardEvent<HTMLInputElement>) => {
-        event.key === "Enter" && addTask();
-    };
-
-    const addTask = () => {
-        if (inputValue.trim() === "") {
-            setError("Поле обязательное!");
-            return;
-        }
-        addTaskItem(inputValue.trim(), id);
-        setInputValue("");
+    const addTask = (taskTitle: string) => {
+        addTaskItem(taskTitle, id);
     };
 
     const onClickDelBtn = () => {
         removeTodoList(id);
     };
 
+    const changeTodolistTitle = (newTitle: string) => {
+        onChangeTodoListTitle(id, newTitle);
+    };
+
     return (
         <div className={styles.toDoListItem}>
             <div className={styles.toDoListHeader}>
-                <h2 className={styles.title}>{title}</h2>
+                <h2 className={styles.title}>
+                    <EditableSpan title={title} onChangeTitle={changeTodolistTitle} />
+                </h2>
                 <div className={styles.delBtn}>
                     <button onClick={onClickDelBtn}>x</button>
                 </div>
             </div>
 
-            <div className={styles.addNewTask}>
-                <input
-                    className={error ? styles.error : ""}
-                    value={inputValue}
-                    onChange={onChangeHandler}
-                    onKeyDown={onClickEnter}
-                    type="text"
-                    placeholder=""
-                />
-                <div className={styles.addBtn}>
-                    <button onClick={addTask}>+</button>
-                </div>
-            </div>
-            {error && (
-                <div className={styles.errorMessage}>Поле обязательно</div>
-            )}
+            <AddItemForm addItem={addTask} />
             <ul className={styles.tasks}>
                 {tasks.map((task) => (
                     <TaskItem
@@ -85,6 +68,7 @@ export const ToDoList: React.FC<ToDoListItemProps> = ({
                         task={task}
                         removeTaskItem={removeTaskItem}
                         changeStatus={changeStatus}
+                        changeTaskTitle={changeTaskTitle}
                     />
                 ))}
             </ul>

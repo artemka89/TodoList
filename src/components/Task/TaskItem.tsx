@@ -1,12 +1,18 @@
 import { ChangeEvent } from "react";
 import { TaskItemType } from "../../App";
 import styles from "./TaskItem.module.scss";
+import { EditableSpan } from "../EditableSpan/EditableSpan";
 
 type TaskItemProps = {
-    todoListId: string
+    todoListId: string;
     task: TaskItemType;
     removeTaskItem: (taskId: string, todoListId: string) => void;
     changeStatus: (taskId: string, isDone: boolean, todoListId: string) => void;
+    changeTaskTitle: (
+        taskId: string,
+        newTitle: string,
+        todoListId: string
+    ) => void;
 };
 
 export const TaskItem: React.FC<TaskItemProps> = ({
@@ -14,6 +20,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
     task,
     removeTaskItem,
     changeStatus,
+    changeTaskTitle,
 }) => {
     const deleteTask = () => {
         removeTaskItem(task.id, todoListId);
@@ -21,6 +28,10 @@ export const TaskItem: React.FC<TaskItemProps> = ({
 
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         changeStatus(task.id, event.target.checked, todoListId);
+    };
+
+    const onChangeTitleHandler = (newTitle: string) => {
+        changeTaskTitle(task.id, newTitle, todoListId);
     };
 
     return (
@@ -34,7 +45,10 @@ export const TaskItem: React.FC<TaskItemProps> = ({
                 checked={task.isDone}
                 onChange={onChangeHandler}
             />
-            <p className={styles.taskName}>{task.name}</p>
+            <EditableSpan
+                title={task.name}
+                onChangeTitle={onChangeTitleHandler}
+            />
             <div className={styles.delBtn}>
                 <button onClick={deleteTask}>X</button>
             </div>
